@@ -86,12 +86,12 @@ class NeuralNet:
         while MSE > ERROR_LIMIT:
             epoch += 1
             
-            input_layers      = self.update( training_data, trace=True )
-            out               = input_layers[-1]
+            input_layers = self.update( training_data, trace=True )
+            out         = input_layers[-1]
                               
-            error             = training_targets - out
-            delta             = error
-            MSE               = np.mean( np.power(error,2) )
+            error       = training_targets - out
+            delta       = error
+            MSE         = np.mean( np.power(error,2) )
             
             
             loop  = itertools.izip(
@@ -125,7 +125,7 @@ class NeuralNet:
                 # Show the current training status
                 print "* current network error (MSE):", MSE
         
-        print "* Converged to error bound (%.4g) with MSE = %.4g." % ( ERROR_LIMIT, MSE )
+        print "* Converged to error bound (%.4g) with MSE(mean square error) = %.4g." % ( ERROR_LIMIT, MSE )
         print "* Trained for %d epochs." % epoch
     # end backprop
     

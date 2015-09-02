@@ -1,5 +1,9 @@
+#This Neural Network is implemented for Iris_dataset but you can use it for any dataset by slight change in main.py 
+
 # Neural network written in Python (NumPy)
-This is an implementation of a fully connected neural network in NumPy. The network may be batch trained by backpropagation. By implementing a batch approach, the NumPy implementation is able to harvest the power of the BLAS library to efficiently perform the required calculations. 
+This is an implementation of a fully connected neural network in NumPy.
+The network may be batch trained by backpropagation.
+By implementing a batch approach, the NumPy implementation is able to harvest the power of the BLAS library to efficiently perform the required calculations. 
 
 *The code has been tested.*
 

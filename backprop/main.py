@@ -1,3 +1,4 @@
+from sklearn import datasets
 from activation_functions import sigmoid_function, tanh_function, linear_function,\
                                  LReLU_function, ReLU_function, symmetric_elliot_function, elliot_function
 from neuralnet import NeuralNet
@@ -11,26 +12,41 @@ class Instance:
         self.features = np.array(features)
         self.targets = np.array(target)
 #endclass Instance
+#---------------------------------------------------------------
+##Importing Iris data Set
+iris = datasets.load_iris()
+X = iris.data[:,]
+Y = iris.target
+inp=[]
+for i in range(0,len(X)): # preprocessing Iris data, in 4 input and 3 output format 
+    inp.append([list(X[i])])
+    if Y[i]==0:
+        y=[1,0,0]
+    elif Y[i]==1:
+        y=[0,1,0]
+    elif Y[i]==2:
+        y=[0,0,1]
+    inp[i].append(y)
+#training sets
+training_one =[]
+for i in range(len(inp)):
+    training_one.append(Instance(inp[i][0],inp[i][1])) #creating trainig Set from data
+#------------------------------------------------------------
 
-
-# two training sets
-training_one =  [ Instance( [0,0], [0] ), Instance( [0,1], [1] ), Instance( [1,0], [1] ), Instance( [1,1], [0] ) ]
-training_two =  [ Instance( [0,0], [0,0] ), Instance( [0,1], [1,1] ), Instance( [1,0], [1,1] ), Instance( [1,1], [0,0] ) ]
-
-
-n_inputs = 2
-n_outputs = 1
-n_hiddens = 2
-n_hidden_layers = 1
+n_inputs = 4 # $ input feature 
+n_outputs = 3 #3 output
+n_hiddens = 4 #no of node at hidden layer
+n_hidden_layers = 2 # no of hidden layer
+# here 2 Hidden layer with 4 node each and 1 output layer with 2 node 
 
 # specify activation functions per layer eg: [ hidden_layer_1, hidden_layer_2, output_layer ]
-activation_functions = [ tanh_function ]*n_hidden_layers + [ sigmoid_function ]
+activation_functions = [symmetric_elliot_function]*n_hidden_layers + [ sigmoid_function ]
 
 # initialize the neural network
 network = NeuralNet(n_inputs, n_outputs, n_hiddens, n_hidden_layers, activation_functions)
 
 # start training on test set one
-network.backpropagation(training_one, ERROR_LIMIT=1e-4, learning_rate=0.3, momentum_factor=0.9  )
+network.backpropagation(training_one, ERROR_LIMIT=.1, learning_rate=0.2, momentum_factor=0.2  )
 
 # save the trained network
 network.save_to_file( "trained_configuration.pkl" )
