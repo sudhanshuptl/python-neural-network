@@ -1,4 +1,4 @@
-#This Neural Network is implemented for Iris_dataset but you can use it for any dataset by slight change in main.py 
+This Neural Network is implemented for Iris_dataset but you can use it for any dataset by Applying slight changes in main.py 
 
 # Neural network written in Python (NumPy)
 This is an implementation of a fully connected neural network in NumPy.
