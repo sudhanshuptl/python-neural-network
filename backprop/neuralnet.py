@@ -6,14 +6,16 @@ import collections
 
 class NeuralNet:
     def __init__(self, n_inputs, n_outputs, n_hiddens, n_hidden_layers, activation_functions ):
-        self.n_inputs = n_inputs                # Number of network input signals
-        self.n_outputs = n_outputs              # Number of desired outputs from the network
-        self.n_hiddens = n_hiddens              # Number of nodes in each hidden layer
-        self.n_hidden_layers = n_hidden_layers  # Number of hidden layers in the network
-        self.activation_functions = activation_functions
+        self.n_inputs = n_inputs                         # Number of network input signals
+        self.n_outputs = n_outputs                       # Number of desired outputs from the network
+        self.n_hiddens = n_hiddens                       # Number of nodes in each hidden layer
+        self.n_hidden_layers = n_hidden_layers           # Number of hidden layers in the network
+        self.activation_functions = activation_functions # Activation function for each layer
         
+        #-------------------------------------- Checking Activation function is define for all layer specificaly -----------------------------------------#
         assert len(activation_functions)==(n_hidden_layers+1), "Requires "+(n_hidden_layers+1)+" activation functions, got: "+len(activation_functions)+"."
-        
+
+        #---------------------initialise Weight Matrix-----------------------------#
         if n_hidden_layers == 0:
             # Count the necessary number of weights for the input->output connection.
             # input -> [] -> output
@@ -27,13 +29,14 @@ class NeuralNet:
         
         # Initialize the network with new randomized weights
         self.set_weights( self.generate_weights() )
-    #end
+        
+    #end __init__ function
     
     
     def generate_weights(self, low=-0.1, high=0.1):
-        # Generate new random weights for all the connections in the network
+        # Generate new random weights for each the connections in the network
         if not False:
-            # Support NumPy
+            # Does't Support NumPy
             return [random.uniform(low,high) for _ in xrange(self.n_weights)]
         else:
             return np.random.uniform(low, high, size=(1,self.n_weights)).tolist()[0]
@@ -59,7 +62,7 @@ class NeuralNet:
         # This is useful for utilizing a previously optimized neural network weight set.
         self.weights = self.unpack( weight_list )
     #end
-    
+   
     
     def get_weights(self, ):
         # This will stack all the weights in the network on a list, which may be saved to the disk.
@@ -72,6 +75,7 @@ class NeuralNet:
             return np.hstack(( np.ones((A.shape[0],1)), A ))
         #end addBias
         
+	#check for possible error 
         assert trainingset[0].features.shape[0] == self.n_inputs, "ERROR: input size varies from the defined input setting"
         assert trainingset[0].targets.shape[0] == self.n_outputs, "ERROR: output size varies from the defined output setting"
         
@@ -81,15 +85,15 @@ class NeuralNet:
         MSE      = ( ) # inf
         neterror = None
         momentum = collections.defaultdict( int )
-        
+        # collections.defaultdict( int ) a special  dictionary that can use use any data type as key and value 
         epoch = 0
         while MSE > ERROR_LIMIT:
             epoch += 1
             
-            input_layers = self.update( training_data, trace=True )
+            input_layers = self.forwordProp( training_data, trace=True )
             out         = input_layers[-1]
                               
-            error       = training_targets - out
+            error       = training_targets - out #Error at final layer
             delta       = error
             MSE         = np.mean( np.power(error,2) )
             
@@ -102,11 +106,12 @@ class NeuralNet:
 
             
             for i, weight_layer, input_signals in loop:
+		#input_signels , input to that layer 
                 # Loop over the weight layers in reversed order to calculate the deltas
                 
-                # Calculate weight change 
+                # Calculate weight change ##np.dot() calculate dot product of array or matrix mult of matrixes depends on input
                 dW = learning_rate * np.dot( addBias(input_signals).T, delta ) + momentum_factor * momentum[i]
-                
+                # matrix.T give transpose
                 if i!= 0:
                     """Do not calculate the delta unnecessarily."""
                     # Skipping the bias weight during calculation.
@@ -121,21 +126,22 @@ class NeuralNet:
                 # Update the weights
                 self.weights[ i ] += dW
             
-            if epoch%1000==0:
+            if epoch%50==0:
                 # Show the current training status
-                print "* current network error (MSE):", MSE
+                print "* Epoch: "+str(epoch)+ "  * current network error (MSE):", MSE
         
         print "* Converged to error bound (%.4g) with MSE(mean square error) = %.4g." % ( ERROR_LIMIT, MSE )
         print "* Trained for %d epochs." % epoch
     # end backprop
     
     
-    def update(self, input_values, trace=False ):
+    def forwordProp(self, input_values, trace=False ):
         # This is a forward operation in the network. This is how we calculate the network output
         # from a set of input signals.
         
         output = input_values
-        if trace: tracelist = [ output ]
+	#if output of each layer is required(Back-Prop Algo needs this feature) then only we store it 
+        if trace: tracelist = [ output ] 
         
         for i, weight_layer in enumerate(self.weights):
             # Loop over the network layers and calculate the output
@@ -148,7 +154,7 @@ class NeuralNet:
         return output
     #end
     
-    
+ 
     def save_to_file(self, filename = "network.pkl" ):
         import cPickle
         """
@@ -190,4 +196,5 @@ class NeuralNet:
         
         return network
     #end
+
 #end class

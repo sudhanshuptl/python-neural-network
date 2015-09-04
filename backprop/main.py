@@ -1,8 +1,12 @@
+__auther__='Sudhanshu Patel'
+
+
 from sklearn import datasets
+import numpy as np
 from activation_functions import sigmoid_function, tanh_function, linear_function,\
                                  LReLU_function, ReLU_function, symmetric_elliot_function, elliot_function
 from neuralnet import NeuralNet
-import numpy as np
+
 
 
 class Instance:
@@ -12,7 +16,9 @@ class Instance:
         self.features = np.array(features)
         self.targets = np.array(target)
 #endclass Instance
-#---------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
 ##Importing Iris data Set
 iris = datasets.load_iris()
 X = iris.data[:,]
@@ -30,20 +36,22 @@ for i in range(0,len(X)): # preprocessing Iris data, in 4 input and 3 output for
 #training sets
 training_one =[]
 for i in range(len(inp)):
-    training_one.append(Instance(inp[i][0],inp[i][1])) #creating trainig Set from data
-#------------------------------------------------------------
+    training_one.append(Instance(inp[i][0],inp[i][1])) #Encapsulation of a `input signal : output signal
+#------------------------------------------------------------------------------
 
-n_inputs = 4 # $ input feature 
-n_outputs = 3 #3 output
-n_hiddens = 4 #no of node at hidden layer
-n_hidden_layers = 2 # no of hidden layer
+n_inputs = 4            # 4 input feature 
+n_outputs = 3           # 3 output
+n_hiddens = 4           # 4 node at each hidden layer
+n_hidden_layers = 2     # no of hidden layer
 # here 2 Hidden layer with 4 node each and 1 output layer with 2 node 
 
+#------------------------DEclaration of activation or Transfer function at each layer --------------------------------------#
 # specify activation functions per layer eg: [ hidden_layer_1, hidden_layer_2, output_layer ]
-activation_functions = [symmetric_elliot_function]*n_hidden_layers + [ sigmoid_function ]
+activation_functions = [sigmoid_function]*n_hidden_layers + [ sigmoid_function ]
 
 # initialize the neural network
 network = NeuralNet(n_inputs, n_outputs, n_hiddens, n_hidden_layers, activation_functions)
+# network is Instance of class Neuralnet
 
 # start training on test set one
 network.backpropagation(training_one, ERROR_LIMIT=.1, learning_rate=0.2, momentum_factor=0.2  )
@@ -56,4 +64,5 @@ network.save_to_file( "trained_configuration.pkl" )
 
 # print out the result
 for instance in training_one:
-    print instance.features, network.update( np.array([instance.features]) ), "\ttarget:", instance.targets
+    print instance.features, network.forwordProp( np.array([instance.features]) ), "\ttarget:", instance.targets
+
