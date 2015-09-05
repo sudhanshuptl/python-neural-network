@@ -41,20 +41,20 @@ for i in range(len(inp)):
 
 n_inputs = 4            # 4 input feature 
 n_outputs = 3           # 3 output
-n_hiddens = 4           # 4 node at each hidden layer
+n_hiddens = 8           # 4 node at each hidden layer
 n_hidden_layers = 2     # no of hidden layer
 # here 2 Hidden layer with 4 node each and 1 output layer with 2 node 
 
 #------------------------DEclaration of activation or Transfer function at each layer --------------------------------------#
 # specify activation functions per layer eg: [ hidden_layer_1, hidden_layer_2, output_layer ]
-activation_functions = [sigmoid_function]*n_hidden_layers + [ sigmoid_function ]
+activation_functions = [symmetric_elliot_function,]*n_hidden_layers + [ sigmoid_function ]
 
 # initialize the neural network
 network = NeuralNet(n_inputs, n_outputs, n_hiddens, n_hidden_layers, activation_functions)
 # network is Instance of class Neuralnet
 
 # start training on test set one
-network.backpropagation(training_one, ERROR_LIMIT=.1, learning_rate=0.2, momentum_factor=0.2  )
+network.backpropagation(training_one, ERROR_LIMIT=.05, learning_rate=0.2, momentum_factor=0.2  )
 
 # save the trained network
 network.save_to_file( "trained_configuration.pkl" )
