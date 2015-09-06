@@ -1,4 +1,4 @@
-__auther__='Sudhanshu Patel'
+__auther__='Jørgen Grimnes, Sudhanshu Patel'
 
 
 from sklearn import datasets
@@ -39,11 +39,11 @@ for i in range(len(inp)):
     training_one.append(Instance(inp[i][0],inp[i][1])) #Encapsulation of a `input signal : output signal
 #------------------------------------------------------------------------------
 
-n_inputs = 4            # 4 input feature 
-n_outputs = 3           # 3 output
-n_hiddens = 8           # 4 node at each hidden layer
-n_hidden_layers = 2     # no of hidden layer
-# here 2 Hidden layer with 4 node each and 1 output layer with 2 node 
+n_inputs = 4            # Number of  input feature 
+n_outputs = 3           # Number of neuron output
+n_hiddens = 8           # Number of neuron at each hidden layer
+n_hidden_layers = 2     # number of hidden layer
+# here 2 Hidden layer with 8 node each and 1 output layer with 3 node 
 
 #------------------------DEclaration of activation or Transfer function at each layer --------------------------------------#
 # specify activation functions per layer eg: [ hidden_layer_1, hidden_layer_2, output_layer ]
