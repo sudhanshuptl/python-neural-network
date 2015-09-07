@@ -24,3 +24,12 @@ class Instance:
 training_one=[]
 for i in range(len(inp)):
     training_one.append(Instance(inp[i][0],inp[i][1]))
+
+print 'Data formate :' 
+print training_one[1].features,training_one[1].targets
+print 'No. of training set :',len(training_one)
+print 'No. of Input feature :',len(training_one[1].features)
+try:
+    print 'No. of output/input set:',len(training_one[1].targets)
+except:
+    print 1
